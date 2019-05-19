@@ -45,9 +45,10 @@ $ python setup.py install
 ```
 Далее требуется [установить модель для NLTK](#установка-модели-для-nltk)
 
+Подложить проекты для анализа.
 Для запуска выполнить команду
 ```
-$ project_analyzer
+$ python -m project_analyzer
 ```
 
 ## Запуск с помощью [Github](https://github.com/AlexanderTulakin/OTUS-project_analyzer) без установки
