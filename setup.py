@@ -13,6 +13,6 @@ setup(
     install_requires=['nltk'],
     entry_points={
         'console_scripts':
-            ['project_analyzer = project_analyzer.__main__:run']
+            ['project_analyzer=project_analyzer.__main__:run']
         }
 )

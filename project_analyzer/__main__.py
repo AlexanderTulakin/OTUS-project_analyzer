@@ -29,13 +29,13 @@ def print_top_verbs_result(top_words: list):
     """
     Вывести результат анализа по наиболее часто встречающимся глаголам в консоль
     """
-    result = f'total {len(total_verbs)} words, {len(set(total_verbs))} unique\n'
+    result = f'total {len(top_words)} words, {len(set(top_words))} unique\n'
     for word, occurrence in top_words:
         result += f'{word} {occurrence}\n'
     print(result.rstrip())
 
 
-if __name__ == '__main__':
+def run():
     if ENABLE_LOG:
         setup_logger()
 
@@ -45,3 +45,7 @@ if __name__ == '__main__':
     top_words = common.get_top_words(total_verbs, top_size=200)
 
     print_top_verbs_result(top_words)
+
+
+if __name__ == '__main__':
+    run()
