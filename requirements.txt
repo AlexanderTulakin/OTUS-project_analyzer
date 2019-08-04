@@ -1,1 +1,3 @@
 nltk
+validator-collection
+gitpython
