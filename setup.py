@@ -10,7 +10,7 @@ setup(
     author='hudonio',
     author_email='iatulakin@gmail.com',
     description='Util to analyze projects words',
-    install_requires=['nltk'],
+    install_requires=['nltk', 'validator-collection', 'gitpython'],
     entry_points={
         'console_scripts':
             ['project_analyzer=project_analyzer.__main__:run']

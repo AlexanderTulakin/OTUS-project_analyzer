@@ -1,40 +1,79 @@
 # Project Analyzer
-Модуль для анализа проектов на Python.
+Модуль для анализа проектов.
 
-Скрипт выводит список наиболее часто встречающихся глаголов в функциях.
-Результат выводится в консоль. 
+Возможности:
+* работа как с git репозиториями, так и с локальными проектами
+* анализ проектов на Python
+* вывод результата в консоль или в файл
+* различные варианты форматирования результата: json, text или csv
+* ввод всех параметров через командную строку
 
-Пример результата:
+На текущий момент доступны отчёты:
+* top_words
+
+    Вывод список наиболее часто встречающихся глаголов или существительных в функциях или локальных переменных функций.
+    
+    Нюансы работы:
+    * Исходный код парсится с помощью [AST](https://docs.python.org/3/library/ast.html)
+    * Для определения частей речи (существительное, глагол и пр.) используется [Natural Language Toolkit](http://www.nltk.org)
+    
+    Пример результата:
+    ```
+    total 4 words, 4 unique
+
+    get: 8
+    is: 7
+    save: 3
+    run: 1
+    ```
+
+## Использование
 
 ```
-total 31 words, 3 unique
-get 22
-save 7
-add 2
+project_analyzer [-h] [--repo_url REPO_URL] [--repo_type {git}]
+                        [--path PATH] [--lang {python}]
+                        [--max_files MAX_FILES] [--rep_format {json,csv,text}]
+                        [--rep_outp REP_OUTP]
+                        {top_words} ...
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Project paths:
+  Allowed one of param: repo_url+repo_type or path
+
+  --repo_url REPO_URL   Source url (if need to download) (default: None)
+  --repo_type {git}     Source type (default: git)
+  --path PATH           Path to existing project (default: None)
+
+Project attributes:
+  --lang {python}       Language of source code (default: python)
+  --max_files MAX_FILES Max files for analyse (default: 100)
+
+Report attributes:
+  --rep_format {json,csv,text}
+                        Report format (default: text)
+  --rep_outp REP_OUTP   Output - file name or stdout (default: stdout)
+
+Report name:
+  {top_words}
+    top_words           return top words used in project code.In default count
+                        verbs in functions.
+                        
+          Params for report:
+              --word_type {noun,verbs,all}
+                                    Type of words for analyze
+              --analyze_obj {functions,local_vars}
+                                    What kind of object need to analyze
+              --top_size TOP_SIZE   Count of top words                
 ```
-Список проектов для анализа указывается в project_analyzer/__main__.py. 
-
-По умолчанию анализируются проекты:
-* django
-* flask
-* pyramid
-* reddit
-* requests
-* sqlalchemy
-
-Так же возможно использование в качестве библиотеки. Подробности [ниже](#использование-в-качестве-библиотеки).
-
-## Как работает
-
-В указанном проекте находятся все Python файлы. 
-Исходный код парсится с помощью [AST](https://docs.python.org/3/library/ast.html)
-
-Для определения частей речи (существительное, глагол и пр.) используется [Natural Language Toolkit](http://www.nltk.org)
 
 ## Требования
 
 * Python >= 3.6
-* nltk 
+* nltk
+* validator-collection
+* gitpython
 
 
 ## Установка с помощью [GitHub](https://github.com/AlexanderTulakin/OTUS-project_analyzer)
@@ -43,23 +82,7 @@ $ git clone https://github.com/AlexanderTulakin/OTUS-project_analyzer.git
 $ cd OTUS-project_analyzer
 $ python setup.py install
 ```
-Далее требуется [установить модель для NLTK](#установка-модели-для-nltk)
-
-Подложить проекты для анализа.
-Для запуска выполнить команду
-```
-$ python -m project_analyzer
-```
-
-## Запуск с помощью [Github](https://github.com/AlexanderTulakin/OTUS-project_analyzer) без установки
-Модуль можно запустить без установки выполнив следующие шаги:
-1. Склонировать или установить [репозиторий](https://github.com/AlexanderTulakin/OTUS-project_analyzer)
-2. Открыть терминал и перейти в каталог с проектом
-3. Выполнить ```python -m pip install -r requirements.txt```
-4. [Установить модель для NLTK](#установка-модели-для-nltk)
-
-Теперь для запуска выполнить ```python -m project_analyzer```.
-
+Далее [установить модель для NLTK](#установка-модели-для-nltk)
 
 ## Установка модели для NLTK
 Предварительно требуется установить модель для модуля NLTK для разметки слов по частям речи.
@@ -72,20 +95,3 @@ $ python -m project_analyzer
 Если при установке возникает ошибка `SSL: CERTIFICATE_VERIFY_FAILED`, то по её исправлению можно почитать на
 [stackoverflow](https://stackoverflow.com/questions/41348621/ssl-error-downloading-nltk-data)
 
-## Использование в качестве библиотеки
-
-Доступные функции:
-* get_verbs_in_proj_functions - получить все глаголы из наименований функций в Python файлах для указанного проекта
-* get_top_verbs_in_proj_functions - получить топ глаголов из наименований функций в Python файлах для указанного проекта
-    с группировкой по частоте встречаемости
-* get_top_functions_in_proj - получить топ функций в Python файлах для указанного проекта
-* get_words_in_proj_functions - получить все слова из наименований функций в Python файлах для указанного проекта
-
-Пример:
-
-```python
->>> import project_analyzer
-
->>> project_analyzer.get_top_verbs_in_proj_functions('requests', top_size=2)
-
-[('get', 10), ('save', 5)]

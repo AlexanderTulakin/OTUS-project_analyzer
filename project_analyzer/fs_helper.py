@@ -3,23 +3,25 @@
 Модуль для работы с файловой системой
 """
 import logging
-import pathlib
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 
-def get_python_files_for_proj(project, max_files=100):
-    """
-    :param project: путь до проекта
-    :param max_files: максимальное количество файлов для анализа
+class FSMixin:
+    def _get_files_for_proj(self):
+        """
+        Возвращает все файлы указанного языка для указанного проекта в переменную self.files.
+        """
+        logger.debug(f'Ищем {self.lang} файлы для проекта "{self.path}"')
+        patterns = {'python': '*.py'}
+        pattern = patterns[self.lang]
+        if not pattern:
+            raise Exception(f'Язык {self.lang} не поддерживается')
 
-    :return: список Python файлов
-    """
-    logger.debug(f'Find python files for project "{project}"')
-    python_files = []
-    for python_file in pathlib.Path(project).rglob('*.py'):
-        python_files.append(str(python_file))
-        if len(python_files) == max_files:
-            break
-    logger.debug(f'found ({len(python_files)}): {python_files}')
-    return python_files
+        self.files = []
+        for proj_file in Path(self.path).rglob(pattern):
+            self.files.append(str(proj_file))
+            if len(self.files) == self.max_files:
+                break
+        logger.debug(f'Найдено ({len(self.files)}): {self.files}')

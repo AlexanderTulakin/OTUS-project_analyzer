@@ -5,8 +5,6 @@
 import collections
 import logging
 
-from project_analyzer.nltk_helper import is_verb
-
 logger = logging.getLogger(__name__)
 
 
@@ -17,7 +15,7 @@ def get_top_words(words, top_size=None):
     :param words: список слов
     :param top_size: сколько элементов выводить. Если не указан, то выводятся все элементы
     """
-    return collections.Counter(words).most_common(top_size)
+    return {item[0]: item[1] for item in collections.Counter(words).most_common(top_size)}
 
 
 def is_magic_func(func_name):
@@ -36,13 +34,3 @@ def split_snake_case_name_to_words(name):
         'get_words_from_name' -> ['get', 'words', 'from', 'name']
     """
     return [word for word in name.split('_')]
-
-
-def get_verbs_from_name(name) -> list:
-    """
-    Получить список глаголов из наименования функции/переменной
-
-    Пример:
-        'get_verbs_from_name' -> ['get']
-    """
-    return [word for word in split_snake_case_name_to_words(name) if is_verb(word)]
