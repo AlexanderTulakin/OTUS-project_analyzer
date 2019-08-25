@@ -23,7 +23,7 @@ class Repo:
 
         self.type = type_.lower()
         self.path = None
-        if self.type != 'git':
+        if self.type != 'github':
             raise Exception(f'Репозиторий с типом {self.type} не поддерживается')
 
     def _git_clone(self, ignore_exist=True):
@@ -44,7 +44,7 @@ class Repo:
         :return: путь, куда скачен репозиторий
         """
         logger.debug(f'Скачиваем репозиторий')
-        if self.type == 'git':
+        if self.type == 'github':
             self._git_clone(ignore_exist)
         logger.debug(f'Путь, куда скачен репозиторий: {self.path}')
         return self.path
