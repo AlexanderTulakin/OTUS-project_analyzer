@@ -57,7 +57,7 @@ def create_parser():
     parser = argparse.ArgumentParser(prog='project_analyzer', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     proj_paths = parser.add_argument_group('Project paths', 'Allowed one of param: repo_url+repo_type or path')
     proj_paths.add_argument('--repo_url', help='Source url (if need to download)', type=validators.url)
-    proj_paths.add_argument('--repo_type', help='Source type', choices=['git'], default='git')
+    proj_paths.add_argument('--repo_type', help='Source type', choices=['github'], default='github')
     proj_paths.add_argument('--path', help='Path to existing project', type=check_path)
 
     proj_group = parser.add_argument_group('Project attributes')
